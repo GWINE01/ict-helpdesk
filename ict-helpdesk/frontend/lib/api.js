@@ -38,7 +38,9 @@ export async function api(path, { method = "GET", body } = {}) {
   const token = localStorage.getItem("token");
   if (token) headers.Authorization = "Bearer " + token;
 
-  const response = await fetch("/api" + path, {
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://ict-helpdesk-backend.onrender.com";
+  const response = await fetch(API_URL + "/api" + path, {
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
@@ -50,7 +52,6 @@ export async function api(path, { method = "GET", body } = {}) {
     window.location.href = "/";
     return null;
   }
-
   const data = await response.json().catch(() => null);
   if (!response.ok) throw new Error(errorMessage(data));
   return data;
