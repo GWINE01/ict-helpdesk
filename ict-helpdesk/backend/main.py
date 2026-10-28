@@ -9,12 +9,26 @@ Every route lives in this file. Each one follows the same pattern:
 from typing import Literal, Optional
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from database import get_db, init_db
 from security import create_session, current_user, hash_password, require_role, verify_password
 
 app = FastAPI(title="ICT Help Desk API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://ict-helpdesk-gamma.vercel.app",
+        "http://localhost:3000",
+        "http://localhost:3001",
+    ],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 init_db()
 
 # ---------------------------------------------------------------------------
